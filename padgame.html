@@ -1,0 +1,276 @@
+<html>
+<canvas id="gameCanvas" width="800" height="600"></canvas>
+<script>
+var canvas;
+var canvasContext;
+
+
+
+var ballo=100;
+var ballospeed=10;
+
+var ballp=100;
+var ballpspeed=4;
+
+
+var paddle=250;
+const paddle_height=100;
+const paddle_thick=15;
+
+
+var paddlec=250;
+var player1score=0;
+var player2score=0;
+
+var winscreen=false;
+const winscore=2;
+
+function mouseposi(evt){
+			var rect=canvas.getBoundingClientRect();
+			var root=document.documentElement;
+			var mouseX=evt.clientX - rect.left - root.scrollLeft;
+			var mouseY=evt.clientY - rect.top - root.scrollTop;
+			
+			return{
+				x:mouseX,
+				y:mouseY
+				
+				};
+
+
+
+}
+
+function mouseclick(evt){
+			if(winscreen){
+				player1score=0;
+				player2score=0;
+				winscreen=false;}
+
+
+}
+
+
+
+
+
+
+window.onload=function(){
+
+
+canvas=document.getElementById('gameCanvas');
+canvasContext=canvas.getContext('2d');
+
+setInterval(function(){move();draw();},30);
+
+canvas.addEventListener('mousedown',mouseclick);
+
+
+canvas.addEventListener('mousemove',
+	function(evt){
+
+			var mousepos = mouseposi(evt);
+			paddle = mousepos.y-(paddle_height/2);});
+
+
+
+
+}
+
+
+function ballreset(){
+			
+
+
+			if(player1score>=winscore || player2score>=winscore)
+			{	
+			winscreen=true;}
+
+
+
+
+
+			ballospeed=-ballospeed;
+			ballo=canvas.width/2;
+			ballp=canvas.height/2;
+
+
+}
+
+function computermove(){
+		
+		var paddlec_centre=paddlec+(paddle_height/2);
+
+
+		if(paddlec_centre < ballp-35){
+			paddlec+=6;}
+		else if(paddlec_centre > ballp+35)
+			{paddlec-=6;}
+
+						
+
+}
+
+
+
+
+function move(){
+
+if(winscreen==true){return;}
+
+
+computermove();
+ballo+=ballospeed;
+ballp+=ballpspeed;
+
+
+if(ballo<paddle_thick){
+
+		if(ballp > paddle  &&  ballp < paddle+paddle_height){ballospeed=-ballospeed;
+		 		var dy=ballp-(paddle+paddle_height/2);
+				ballpspeed=dy*0.3;}
+				
+	         else{player2score++; ballreset();
+			}
+		     
+
+
+
+}
+
+if(ballo>canvas.width-paddle_thick)
+{	if(ballp > paddlec  &&  ballp < paddlec+paddle_height){ballospeed=-ballospeed;}
+		else{player1score++; ballreset();
+			}}
+
+
+if(ballp<0){ballpspeed=-ballpspeed;}
+
+
+if(ballp>canvas.height)
+{ballpspeed=-ballpspeed;}
+
+
+
+console.log(ballo);
+
+
+}
+
+function draw(){
+
+
+
+ 
+canvasContext.fillStyle='black';
+canvasContext.fillRect(0,0,canvas.width,canvas.height);
+
+
+
+
+if(winscreen){
+canvasContext.fillStyle='white';
+		if(player1score >= winscore){canvasContext.fillText("Leftplayer Won!",300,200);}
+		else if(player2score >= winscore){canvasContext.fillText("Rightplayer Won!",300,200);}
+canvasContext.fillText("continue",canvas.width/2,canvas.height/2);
+return;}
+
+
+
+
+canvasContext.fillStyle='red';
+canvasContext.fillRect(0,paddle,paddle_thick,paddle_height);
+
+
+canvasContext.fillStyle='blue';
+canvasContext.fillRect(canvas.width-15,paddlec,paddle_thick,paddle_height);
+
+
+
+
+
+
+
+
+canvasContext.fillStyle='white';
+canvasContext.fillRect(400,0,5,70);
+
+
+canvasContext.fillStyle='white';
+canvasContext.fillRect(400,100,5,70);
+
+
+canvasContext.fillStyle='white';
+canvasContext.fillRect(400,200,5,70);
+
+
+canvasContext.fillStyle='white';
+canvasContext.fillRect(400,300,5,70);
+
+
+canvasContext.fillStyle='white';
+canvasContext.fillRect(400,400,5,70);
+
+
+canvasContext.fillStyle='white';
+canvasContext.fillRect(400,500,5,70);
+
+
+canvasContext.fillStyle='white';
+canvasContext.fillRect(400,600,5,70);
+
+
+colorcircle(ballo,ballp,10,'white');
+
+canvasContext.fillStyle='red';
+canvasContext.font="20px Georgia";
+canvasContext.fillText("player1",10,100);
+canvasContext.fillText(player1score,100,100);
+canvasContext.fillStyle='blue';
+canvasContext.font="20px Vardana";
+canvasContext.fillText("player2",canvas.width-190,canvas.height-500);
+canvasContext.fillText(player2score,canvas.width-100,canvas.height-500);
+
+}
+
+
+
+
+function colorcircle(x,y,radius,color){
+
+canvasContext.fillStyle=color;
+canvasContext.beginPath();
+canvasContext.arc(x,y,radius,0,Math.PI*2,true);
+canvasContext.fill();
+
+}
+
+</script>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
